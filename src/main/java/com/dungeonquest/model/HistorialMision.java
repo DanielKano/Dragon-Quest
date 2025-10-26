@@ -4,43 +4,47 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "historial_mision")
+@Table(name = "historial_misiones")
 public class HistorialMision {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idHistorial;
+    private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aventurero_id")
-    private Usuario aventurero;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mision_id")
+    @ManyToOne
+    @JoinColumn(name = "mision_id", nullable = false)
     private Mision mision;
     
+    @Column(nullable = false)
     private String estadoAnterior;
+    
+    @Column(nullable = false)
     private String estadoNuevo;
+    
+    @Column(nullable = false)
     private LocalDateTime fechaCambio;
     
-    // Constructores
     public HistorialMision() {
         this.fechaCambio = LocalDateTime.now();
     }
     
-    public HistorialMision(Usuario aventurero, Mision mision, String estadoAnterior, String estadoNuevo) {
+    public HistorialMision(Usuario usuario, Mision mision, String estadoAnterior, String estadoNuevo) {
         this();
-        this.aventurero = aventurero;
+        this.usuario = usuario;
         this.mision = mision;
         this.estadoAnterior = estadoAnterior;
         this.estadoNuevo = estadoNuevo;
     }
     
     // Getters y Setters
-    public Long getIdHistorial() { return idHistorial; }
-    public void setIdHistorial(Long idHistorial) { this.idHistorial = idHistorial; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public Usuario getAventurero() { return aventurero; }
-    public void setAventurero(Usuario aventurero) { this.aventurero = aventurero; }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
     
     public Mision getMision() { return mision; }
     public void setMision(Mision mision) { this.mision = mision; }

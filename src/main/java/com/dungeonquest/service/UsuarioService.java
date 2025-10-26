@@ -1,10 +1,13 @@
 package com.dungeonquest.service;
 
+import com.dungeonquest.exception.UsuarioExistenteException;
 import com.dungeonquest.model.Usuario;
 import com.dungeonquest.model.RolUsuario;
 import com.dungeonquest.model.Rango;
 import com.dungeonquest.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,30 +15,26 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService {
-    
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    
+
+    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
+    private final UsuarioRepository usuarioRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public Usuario registrarUsuario(Usuario usuario) {
         if (usuarioRepository.existsByNombreUsuario(usuario.getNombreUsuario())) {
-            throw new RuntimeException("Nombre de usuario ya existe");
+            throw new UsuarioExistenteException("Nombre de usuario ya existe");
         }
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
-            throw new RuntimeException("Email ya registrado");
+            throw new UsuarioExistenteException("Email ya registrado");
         }
         
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
-    }
-    
-    public Optional<Usuario> autenticarUsuario(String nombreUsuario, String password) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByNombreUsuario(nombreUsuario);
-        if (usuarioOpt.isPresent() && passwordEncoder.matches(password, usuarioOpt.get().getPassword())) {
-            return usuarioOpt;
-        }
-        return Optional.empty();
     }
     
     public List<Usuario> obtenerTodosUsuarios() {
@@ -50,6 +49,10 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
     
+    public Optional<Usuario> obtenerUsuarioPorNombre(String nombreUsuario) {
+        return usuarioRepository.findByNombreUsuario(nombreUsuario);
+    }
+
     public Usuario actualizarUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
@@ -63,13 +66,13 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            // Log de confirmación
-            System.out.println("✅ Cambiando rol de usuario " + usuario.getNombreUsuario() + 
-                              " de " + usuario.getRol() + " a " + nuevoRol);
+            log.info("🔄 ANTES - Usuario: {} | Rol actual: {}", usuario.getNombreUsuario(), usuario.getRol());
             usuario.setRol(nuevoRol);
-            usuarioRepository.save(usuario);
+            usuario = usuarioRepository.save(usuario);
+            log.info("✅ DESPUÉS - Usuario: {} | Nuevo rol: {}", usuario.getNombreUsuario(), usuario.getRol());
             return true;
         }
+        log.error("❌ Usuario con ID {} no encontrado", usuarioId);
         return false;
     }
     

@@ -2,6 +2,8 @@ package com.dungeonquest.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
@@ -32,6 +34,9 @@ public class Usuario {
     
     private Integer experienciaActual;
     private LocalDateTime fechaRegistro;
+
+    @OneToMany(mappedBy = "aventurero", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Mision> misionesTomadas = new ArrayList<>();
     
     // Constructores
     public Usuario() {
@@ -78,5 +83,7 @@ public class Usuario {
     
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
-}
 
+    public List<Mision> getMisionesTomadas() { return misionesTomadas; }
+    public void setMisionesTomadas(List<Mision> misionesTomadas) { this.misionesTomadas = misionesTomadas; }
+}

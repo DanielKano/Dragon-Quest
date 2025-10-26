@@ -34,10 +34,13 @@
             <nav class="nav">
                 <a href="/dashboard" class="nav-link">Dashboard</a>
                 <a href="/misiones" class="nav-link active">Misiones</a>
-                <div th:if="${usuario.rol == 'AVENTURERO'}">
-                    <a href="/misiones/mis-misiones" class="nav-link">Mis Misiones</a>
-                </div>
-                <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                <!-- Opciones para AVENTURERO -->
+                <a th:if="${usuario.rol.name() == 'AVENTURERO'}" 
+                   href="/misiones/mis-misiones" 
+                   class="nav-link">Mis Misiones</a>
+                
+                <!-- Opciones para RECEPCIONISTA y ADMINISTRADOR -->
+                <a th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
                     <a href="/misiones/nueva" class="nav-link">Crear Misión</a>
                 </div>
                 <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
@@ -47,7 +50,7 @@
         <main class="main-content">
             <div class="page-header">
                 <h2>Lista de Misiones</h2>
-                <p th:if="${usuario.rol == 'AVENTURERO'}">Misiones disponibles para tu rango: <strong th:text="${usuario.rango}"></strong></p>
+                <p th:if="${usuario.rol.name() == 'AVENTURERO'}">Misiones disponibles para tu rango: <strong th:text="${usuario.rango}"></strong></p>
             </div>
             
             <div class="misiones-grid">
@@ -85,19 +88,19 @@
                     </div>
                     
                     <div class="mision-actions">
-                        <div th:if="${usuario.rol == 'AVENTURERO' and mision.estado == 'DISPONIBLE'}">
+                        <div th:if="${usuario.rol.name() == 'AVENTURERO' and mision.estado == 'DISPONIBLE'}">
                             <form th:action="@{/misiones/{id}/tomar(id=${mision.idMision})}" method="post">
                                 <button type="submit" class="btn btn-primary btn-small">Tomar Misión</button>
                             </form>
                         </div>
                         
-                        <div th:if="${(usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR') and mision.estado == 'COMPLETADA'}">
+                        <div th:if="${(usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR') and mision.estado == 'COMPLETADA'}">
                             <form th:action="@{/misiones/{id}/verificar(id=${mision.idMision})}" method="post">
                                 <button type="submit" class="btn btn-success btn-small">Verificar</button>
                             </form>
                         </div>
                         
-                        <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                        <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
                             <a th:href="@{/misiones/editar/{id}(id=${mision.idMision})}" class="btn btn-secondary btn-small">Editar</a>
                         </div>
                     </div>

@@ -28,70 +28,88 @@
         </header>
 
         <main>
-            <nav class="container">
+            <div class="container">
                 <header class="header">
                     <h1>🏰 Dungeon Quest</h1>
                     <nav class="nav">
-                <a href="/dashboard" class="nav-link active">Dashboard</a>
-                <a href="/misiones" class="nav-link">Misiones</a>
-                <div th:if="${usuario.rol.name() == 'AVENTURERO'}">
-                    <a href="/misiones/mis-misiones" class="nav-link">Mis Misiones</a>
-                </div>
-                <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
-                    <a href="/misiones/nueva" class="nav-link">Crear Misión</a>
-                </div>
-                <div th:if="${usuario.rol.name() == 'ADMINISTRADOR'}">
-                    <a href="/admin/usuarios" class="nav-link">👑 Gestión de Usuarios</a>
-                </div>
-                <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
-            </nav>
-        </header>
-        
-        <main class="main-content">
-            <div class="welcome-section">
-                <h2>Bienvenido, <span th:text="${usuario.nombreUsuario}"></span>!</h2>
-                <div class="user-info">
-                    <p><strong>Rol:</strong> <span th:text="${usuario.rol}"></span></p>
-                    <p><strong>Rango:</strong> <span th:text="${usuario.rango}"></span></p>
-                    <p><strong>Experiencia:</strong> <span th:text="${usuario.experienciaActual}"></span> exp</p>
-                </div>
-            </div>
-            
-            <div class="dashboard-stats">
-                <div th:if="${usuario.rol.name() == 'AVENTURERO'}" class="stat-card">
-                    <h3>Misiones Activas</h3>
-                    <p class="stat-number" th:text="${misionesActivas}">0</p>
-                </div>
+                        <a href="/dashboard" class="nav-link active">Dashboard</a>
+                        <a href="/misiones" class="nav-link">Misiones</a>
+                        
+                        <!-- Opciones para AVENTURERO -->
+                        <a th:if="${usuario.rol.name() == 'AVENTURERO'}" 
+                           href="/misiones/mis-misiones" 
+                           class="nav-link">Mis Misiones</a>
+                        
+                        <!-- Opciones para RECEPCIONISTA y ADMINISTRADOR -->
+                        <a th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" 
+                           href="/misiones/nueva" 
+                           class="nav-link">Crear Misión</a>
+                        
+                        <!-- Opción EXCLUSIVA para ADMINISTRADOR -->
+                        <a th:if="${usuario.rol.name() == 'ADMINISTRADOR'}" 
+                           href="/admin/usuarios" 
+                           class="nav-link">👑 Gestión de Usuarios</a>
+                        
+                        <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
+                    </nav>
+                </header>
                 
-                <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
-                    <h3>Total Misiones</h3>
-                    <p class="stat-number" th:text="${totalMisiones}">0</p>
-                </div>
-                
-                    <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
-                    <h3>Pendientes Verificación</h3>
-                    <p class="stat-number" th:text="${misionesPendientesVerificacion}">0</p>
-                </div>
-            </div>
-            
-            <div class="quick-actions">
-                <h3>Acciones Rápidas</h3>
-                <div class="action-buttons">
-                    <a href="/misiones" class="btn btn-primary">Ver Todas las Misiones</a>
-                    
-                    <div th:if="${usuario.rol.name() == 'AVENTURERO'}">
-                        <a href="/misiones/mis-misiones" class="btn btn-secondary">Mis Misiones Activas</a>
+                <div class="main-content">
+                    <div class="welcome-section">
+                        <h2>Bienvenido, <span th:text="${usuario.nombreUsuario}"></span>!</h2>
+                        <div class="user-info">
+                            <p><strong>Rol:</strong> <span th:text="${usuario.rol}"></span></p>
+                            <p><strong>Rango:</strong> <span th:text="${usuario.rango}"></span></p>
+                            <p><strong>Experiencia:</strong> <span th:text="${usuario.experienciaActual}"></span> exp</p>
+                        </div>
                     </div>
                     
-                    <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
-                        <a href="/misiones/nueva" class="btn btn-secondary">Crear Nueva Misión</a>
+                    <div class="dashboard-stats">
+                        <!-- Estadísticas para AVENTURERO -->
+                        <div th:if="${usuario.rol.name() == 'AVENTURERO'}" class="stat-card">
+                            <h3>Misiones Activas</h3>
+                            <p class="stat-number" th:text="${misionesActivas}">0</p>
+                        </div>
+                        
+                        <!-- Estadísticas para RECEPCIONISTA y ADMINISTRADOR -->
+                        <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
+                            <h3>Total Misiones</h3>
+                            <p class="stat-number" th:text="${totalMisiones}">0</p>
+                        </div>
+                        
+                        <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
+                            <h3>Pendientes Verificación</h3>
+                            <p class="stat-number" th:text="${misionesPendientesVerificacion}">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <h3>Acciones Rápidas</h3>
+                        <div class="action-buttons">
+                            <a href="/misiones" class="btn btn-primary">Ver Todas las Misiones</a>
+                            
+                            <!-- Botón para AVENTURERO -->
+                            <a th:if="${usuario.rol.name() == 'AVENTURERO'}" 
+                               href="/misiones/mis-misiones" 
+                               class="btn btn-secondary">Mis Misiones Activas</a>
+                            
+                            <!-- Botón para RECEPCIONISTA y ADMINISTRADOR -->
+                            <a th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" 
+                               href="/misiones/nueva" 
+                               class="btn btn-secondary">Crear Nueva Misión</a>
+                            
+                            <!-- Botón EXCLUSIVO para ADMINISTRADOR -->
+                            <a th:if="${usuario.rol.name() == 'ADMINISTRADOR'}" 
+                               href="/admin/usuarios" 
+                               class="btn btn-secondary">👑 Gestionar Usuarios</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
 
         <footer>
-            <div>© Dungeon Quest — Comunidad del Gremio</div>
+            <div>© Dungeon Quest – Comunidad del Gremio</div>
         </footer>
     </div>
 

@@ -3,24 +3,26 @@ package com.dungeonquest.service;
 import com.dungeonquest.model.*;
 import com.dungeonquest.repository.MisionRepository;
 import com.dungeonquest.repository.HistorialMisionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MisionService {
     
-    @Autowired
-    private MisionRepository misionRepository;
+    private final MisionRepository misionRepository;
+    private final HistorialMisionRepository historialRepository;
+    private final UsuarioService usuarioService;
     
-    @Autowired
-    private HistorialMisionRepository historialRepository;
-    
-    @Autowired
-    private UsuarioService usuarioService;
-    
+    public MisionService(MisionRepository misionRepository, HistorialMisionRepository historialRepository, UsuarioService usuarioService) {
+        this.misionRepository = misionRepository;
+        this.historialRepository = historialRepository;
+        this.usuarioService = usuarioService;
+    }
+
     public List<Mision> obtenerTodasMisiones() {
         return misionRepository.findAll();
     }
@@ -30,7 +32,16 @@ public class MisionService {
     }
     
     public List<Mision> obtenerMisionesDisponiblesParaUsuario(Usuario usuario) {
-        return misionRepository.findMisionesDisponiblesParaRango(usuario.getRango());
+        if (usuario == null || usuario.getRango() == null) {
+            throw new IllegalArgumentException("Usuario o rango no válido");
+        }
+        
+        // Get all available missions and filter by rango in Java
+        List<Mision> misionesDisponibles = misionRepository.findMisionesDisponiblesParaRango(EstadoMision.DISPONIBLE);
+        
+        return misionesDisponibles.stream()
+                .filter(mision -> usuario.getRango().ordinal() >= mision.getRangoRequerido().ordinal())
+                .collect(Collectors.toList());
     }
     
     public List<Mision> obtenerMisionesPorAventurero(Usuario aventurero) {
@@ -79,7 +90,8 @@ public class MisionService {
         if (misionOpt.isPresent()) {
             Mision mision = misionOpt.get();
             
-            if (mision.getEstado() == EstadoMision.TOMADA && 
+            // Validar estado y aventurero asignado
+            if (mision.getEstado() == EstadoMision.TOMADA && mision.getAventurero() != null &&
                 mision.getAventurero().getIdUsuario().equals(aventurero.getIdUsuario())) {
                 
                 String estadoAnterior = mision.getEstado().name();
@@ -105,6 +117,10 @@ public class MisionService {
         if (misionOpt.isPresent()) {
             Mision mision = misionOpt.get();
             
+            // Validar que la misión tenga un aventurero asignado
+            Usuario aventureroMision = mision.getAventurero();
+            if (aventureroMision == null) return false;
+
             if (mision.getEstado() == EstadoMision.COMPLETADA && 
                 (verificador.getRol() == RolUsuario.RECEPCIONISTA || 
                  verificador.getRol() == RolUsuario.ADMINISTRADOR)) {
@@ -115,8 +131,7 @@ public class MisionService {
                 misionRepository.save(mision);
                 
                 // Otorgar experiencia al aventurero
-                Usuario aventurero = mision.getAventurero();
-                usuarioService.actualizarRangoUsuario(aventurero.getIdUsuario(), mision.getExperiencia());
+                usuarioService.actualizarRangoUsuario(aventureroMision.getIdUsuario(), mision.getExperiencia());
                 
                 HistorialMision historial = new HistorialMision(
                     verificador, mision, estadoAnterior, EstadoMision.VERIFICADA.name()
@@ -135,5 +150,9 @@ public class MisionService {
     
     public void eliminarMision(Long id) {
         misionRepository.deleteById(id);
+    }
+
+    public long contarMisionesPorEstado(EstadoMision estado) {
+        return misionRepository.countByEstado(estado);
     }
 }

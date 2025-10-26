@@ -13,13 +13,13 @@ import java.util.List;
 @Repository
 public interface MisionRepository extends JpaRepository<Mision, Long> {
     List<Mision> findByEstado(EstadoMision estado);
-    List<Mision> findByRangoRequerido(Rango rangoRequerido);
     List<Mision> findByAventurero(Usuario aventurero);
     List<Mision> findByAventureroAndEstado(Usuario aventurero, EstadoMision estado);
     
-    @Query("SELECT m FROM Mision m WHERE m.estado = 'DISPONIBLE' AND m.rangoRequerido <= :rangoUsuario")
-    List<Mision> findMisionesDisponiblesParaRango(@Param("rangoUsuario") Rango rangoUsuario);
+    // Fixed query - removed .ordinal access
+    @Query("SELECT m FROM Mision m WHERE m.estado = :estado")
+    List<Mision> findMisionesDisponiblesParaRango(@Param("estado") EstadoMision estado);
     
-    List<Mision> findByCategoriaIdCategoria(Long categoriaId);
+    List<Mision> findByCategoria_IdCategoria(Long categoriaId);
     long countByEstado(EstadoMision estado);
 }

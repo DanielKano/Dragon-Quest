@@ -4,8 +4,11 @@
 
   /* ----------------- Partículas ----------------- */
   function initParticles(){
-    // simple canvas-based particles for performance
     const container = document.getElementById('particles');
+    // Check if particles container exists
+    if (!container) return;
+    
+    // ... rest of your particles code remains the same
     const canvas = document.createElement('canvas');
     canvas.style.position='absolute';
     canvas.style.inset='0';
@@ -70,6 +73,9 @@
   /* ----------------- Magic cursor ----------------- */
   function initMagicCursor(){
     const cursor = document.getElementById('magicCursor');
+    // Check if magic cursor exists
+    if (!cursor) return;
+    
     let visible = false;
     document.addEventListener('mousemove', e => {
       if(window.matchMedia('(max-width: 480px)').matches) return; // mobile: hide
@@ -99,6 +105,9 @@
   /* ----------------- Scroll cards (pergaminos) ----------------- */
   function initScrolls(){
     const cards = Array.from(document.querySelectorAll('.scroll-card'));
+    // Check if scroll cards exist
+    if (cards.length === 0) return;
+    
     const sfx = document.getElementById('scrollSfx');
     cards.forEach(card=>{
       function toggle(openedByKey=false){
@@ -137,6 +146,9 @@
   /* ----------------- Stats counters ----------------- */
   function initStats(){
     const nodes = document.querySelectorAll('.num');
+    // Check if stat nodes exist
+    if (nodes.length === 0) return;
+    
     const cfg = {threshold:0.5};
     const observer = new IntersectionObserver(entries=>{
       entries.forEach(entry=>{
@@ -217,6 +229,11 @@
     const closeBtn = document.getElementById('closeModal');
     const unlockSfx = document.getElementById('rankSfx');
 
+    // Check if rank elements exist on this page
+    if (ranks.length === 0) {
+      return; // Exit if no rank elements found
+    }
+
     function open(rankKey){
       const info = rankInfo[rankKey];
       if(!info) return;
@@ -246,8 +263,15 @@
       r.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' ') open(r.dataset.rank); });
     });
 
-    closeBtn.addEventListener('click', close);
-    modal.addEventListener('click', (e)=>{ if(e.target === modal) close(); });
+    // Only add event listeners if elements exist
+    if (closeBtn) {
+      closeBtn.addEventListener('click', close);
+    }
+    
+    if (modal) {
+      modal.addEventListener('click', (e)=>{ if(e.target === modal) close(); });
+    }
+    
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
   }
 
@@ -255,6 +279,12 @@
   function initAudio(){
     const amb = document.getElementById('ambienceAudio');
     const toggle = document.getElementById('soundToggle');
+    
+    // Only initialize if audio toggle exists on this page
+    if (!toggle) {
+      return;
+    }
+    
     let enabled = false;
 
     // restore preference

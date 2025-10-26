@@ -2,32 +2,34 @@ package com.dungeonquest.controller;
 
 import com.dungeonquest.model.Usuario;
 import com.dungeonquest.model.RolUsuario;
+import com.dungeonquest.model.EstadoMision;
 import com.dungeonquest.service.MisionService;
 import com.dungeonquest.service.UsuarioService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import java.security.Principal;
 
 @Controller
 public class DashboardController {
     
-    @Autowired
-    private MisionService misionService;
+    private final MisionService misionService;
+    private final UsuarioService usuarioService;
     
-    @Autowired
-    private UsuarioService usuarioService;
-    
+    public DashboardController(MisionService misionService, UsuarioService usuarioService) {
+        this.misionService = misionService;
+        this.usuarioService = usuarioService;
+    }
+
     @GetMapping("/")
     public String home() {
         return "index";
     }
     
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) return "redirect:/auth/login";
+    public String dashboard(Principal principal, Model model) {
+        Usuario usuario = usuarioService.obtenerUsuarioPorNombre(principal.getName())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
         model.addAttribute("usuario", usuario);
         
@@ -41,10 +43,8 @@ public class DashboardController {
             case ADMINISTRADOR:
                 model.addAttribute("totalMisiones", 
                     misionService.obtenerTodasMisiones().size());
-                model.addAttribute("misionesPendientesVerificacion", 
-                    misionService.obtenerTodasMisiones().stream()
-                        .filter(m -> m.getEstado().name().equals("COMPLETADA"))
-                        .count());
+                model.addAttribute("misionesPendientesVerificacion",
+                    misionService.contarMisionesPorEstado(EstadoMision.COMPLETADA));
                 break;
         }
         

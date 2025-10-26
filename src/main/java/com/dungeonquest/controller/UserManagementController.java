@@ -3,10 +3,10 @@ package com.dungeonquest.controller;
 import com.dungeonquest.model.Usuario;
 import com.dungeonquest.model.RolUsuario;
 import com.dungeonquest.service.UsuarioService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -14,16 +14,16 @@ import java.util.List;
 @RequestMapping("/admin")
 public class UserManagementController {
     
+    private final UsuarioService usuarioService;
+
     @Autowired
-    private UsuarioService usuarioService;
-    
+    public UserManagementController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
     @GetMapping("/usuarios")
-    public String gestionUsuarios(HttpSession session, Model model) {
-        Usuario admin = (Usuario) session.getAttribute("usuario");
-        if (admin == null || admin.getRol() != RolUsuario.ADMINISTRADOR) {
-            return "redirect:/dashboard";
-        }
-        
+    public String gestionUsuarios(Model model) {
+        // La autorización ya la hace Spring Security
         List<Usuario> usuarios = usuarioService.obtenerTodosUsuarios();
         model.addAttribute("usuarios", usuarios);
         return "admin/usuarios";
@@ -32,20 +32,15 @@ public class UserManagementController {
     @PostMapping("/usuarios/{id}/cambiar-rol")
     public String cambiarRolUsuario(@PathVariable Long id, 
                                    @RequestParam RolUsuario nuevoRol,
-                                   HttpSession session,
-                                   Model model) {
-        Usuario admin = (Usuario) session.getAttribute("usuario");
-        if (admin == null || admin.getRol() != RolUsuario.ADMINISTRADOR) {
-            return "redirect:/dashboard";
-        }
-        
+                                   RedirectAttributes redirectAttributes) {
+        // La autorización ya la hace Spring Security
         boolean exito = usuarioService.cambiarRolUsuario(id, nuevoRol);
         if (exito) {
-            model.addAttribute("success", "Rol actualizado exitosamente");
+            redirectAttributes.addFlashAttribute("success", "Rol actualizado exitosamente.");
         } else {
-            model.addAttribute("error", "Error al actualizar el rol");
+            redirectAttributes.addFlashAttribute("error", "No se pudo actualizar el rol del usuario.");
         }
         
-        return "redirect:/admin/usuarios?success=" + exito;
+        return "redirect:/admin/usuarios";
     }
 }
