@@ -10,6 +10,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
     
+    @Column(nullable = false)
+    private String nombre;
+    
     @Column(unique = true, nullable = false)
     private String nombreUsuario;
     
@@ -39,6 +42,7 @@ public class Usuario {
     
     public Usuario(String nombreUsuario, String email, String password, RolUsuario rol) {
         this();
+        this.nombre = nombreUsuario; // Por defecto, usar nombreUsuario como nombre
         this.nombreUsuario = nombreUsuario;
         this.email = email;
         this.password = password;
@@ -71,5 +75,8 @@ public class Usuario {
     
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+    
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 }
 

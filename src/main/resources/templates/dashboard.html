@@ -4,20 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dungeon Quest - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🏰 Dungeon Quest</h1>
-            <nav class="nav">
+    <!-- Elementos base -->
+    <div id="particles" aria-hidden="true"></div>
+    
+    <div class="wrap">
+        <header class="site-header">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">DQ</div>
+                <div>
+                    <h1>Dungeon Quest</h1>
+                    <p>El Gremio de Aventureros</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="soundToggle" class="small-toggle" aria-pressed="false">🔊 Ambiente</button>
+                <a href="/auth/logout" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <main>
+            <nav class="container">
+                <header class="header">
+                    <h1>🏰 Dungeon Quest</h1>
+                    <nav class="nav">
                 <a href="/dashboard" class="nav-link active">Dashboard</a>
                 <a href="/misiones" class="nav-link">Misiones</a>
-                <div th:if="${usuario.rol == 'AVENTURERO'}">
+                <div th:if="${usuario.rol.name() == 'AVENTURERO'}">
                     <a href="/misiones/mis-misiones" class="nav-link">Mis Misiones</a>
                 </div>
-                <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
                     <a href="/misiones/nueva" class="nav-link">Crear Misión</a>
+                </div>
+                <div th:if="${usuario.rol.name() == 'ADMINISTRADOR'}">
+                    <a href="/admin/usuarios" class="nav-link">👑 Gestión de Usuarios</a>
                 </div>
                 <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
             </nav>
@@ -34,17 +58,17 @@
             </div>
             
             <div class="dashboard-stats">
-                <div th:if="${usuario.rol == 'AVENTURERO'}" class="stat-card">
+                <div th:if="${usuario.rol.name() == 'AVENTURERO'}" class="stat-card">
                     <h3>Misiones Activas</h3>
                     <p class="stat-number" th:text="${misionesActivas}">0</p>
                 </div>
                 
-                <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}" class="stat-card">
+                <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
                     <h3>Total Misiones</h3>
                     <p class="stat-number" th:text="${totalMisiones}">0</p>
                 </div>
                 
-                <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}" class="stat-card">
+                    <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}" class="stat-card">
                     <h3>Pendientes Verificación</h3>
                     <p class="stat-number" th:text="${misionesPendientesVerificacion}">0</p>
                 </div>
@@ -55,16 +79,44 @@
                 <div class="action-buttons">
                     <a href="/misiones" class="btn btn-primary">Ver Todas las Misiones</a>
                     
-                    <div th:if="${usuario.rol == 'AVENTURERO'}">
+                    <div th:if="${usuario.rol.name() == 'AVENTURERO'}">
                         <a href="/misiones/mis-misiones" class="btn btn-secondary">Mis Misiones Activas</a>
                     </div>
                     
-                    <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                    <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
                         <a href="/misiones/nueva" class="btn btn-secondary">Crear Nueva Misión</a>
                     </div>
                 </div>
             </div>
         </main>
+
+        <footer>
+            <div>© Dungeon Quest — Comunidad del Gremio</div>
+        </footer>
     </div>
+
+    <!-- Elementos base -->
+    <div id="rankModal" class="modal" aria-hidden="true">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModal">✕</button>
+            <div id="rankModalBody"></div>
+        </div>
+    </div>
+
+    <div id="magicCursor" class="magic-cursor" aria-hidden="true"></div>
+
+    <!-- Audio -->
+    <audio id="ambienceAudio" loop preload="auto">
+        <source src="/assets/ambience.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scrollSfx" preload="auto">
+        <source src="/assets/scroll.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rankSfx" preload="auto">
+        <source src="/assets/unlock.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="/js/scripts.js"></script>
+    <script src="/js/views/dashboard.js"></script>
 </body>
 </html>

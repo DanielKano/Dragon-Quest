@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Dungeon Quest</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="error-page">
+    <div class="error-container">
+        <h1>¡Ups! Algo salió mal</h1>
+        <div class="error-message" th:if="${error}">
+            <p th:text="${error}">Mensaje de error</p>
+        </div>
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">Volver al Inicio</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,59 +1,213 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dungeon Quest - Inicio</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dungeon Quest — El Gremio</title>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <meta name="theme-color" content="#151212">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🏰 Dungeon Quest</h1>
-            <p>El gestor de misiones definitivo para aventureros</p>
-        </header>
-        
-        <main class="main-content">
-            <div class="hero-section">
-                <h2>Bienvenido al Sistema de Gestión de Misiones</h2>
-                <p>Gestiona tus misiones, sube de rango y conviértete en una leyenda</p>
-                
-                <div class="cta-buttons">
-                    <a href="/auth/login" class="btn btn-primary">Iniciar Sesión</a>
-                    <a href="/auth/registro" class="btn btn-secondary">Registrarse</a>
-                </div>
-            </div>
-            
-            <div class="features">
-                <div class="feature-card">
-                    <h3>👤 Aventurero</h3>
-                    <p>Toma misiones, completa objetivos y gana experiencia para subir de rango</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>📋 Recepcionista</h3>
-                    <p>Crea nuevas misiones y verifica las completadas por los aventureros</p>
-                </div>
-                
-                <div class="feature-card">
-                    <h3>⚡ Administrador</h3>
-                    <p>Gestiona todo el sistema, usuarios, categorías y tipos de misión</p>
-                </div>
-            </div>
-            
-            <div class="rangos-info">
-                <h3>Sistema de Rangos</h3>
-                <div class="rangos-list">
-                    <span class="rango-f">F (0-100 exp)</span>
-                    <span class="rango-e">E (101-300 exp)</span>
-                    <span class="rango-d">D (301-600 exp)</span>
-                    <span class="rango-c">C (601-1000 exp)</span>
-                    <span class="rango-b">B (1001-1500 exp)</span>
-                    <span class="rango-a">A (1501-2100 exp)</span>
-                    <span class="rango-s">S (2101+ exp)</span>
-                </div>
-            </div>
-        </main>
+
+  <div id="particles" aria-hidden="true"></div>
+
+  <div class="wrap" role="main">
+    <header class="site-header" role="banner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">DQ</div>
+        <div>
+          <h1>Dungeon Quest</h1>
+          <p>El Gremio de Aventureros — Comunidad</p>
+        </div>
+      </div>
+
+      <div class="header-actions" role="navigation" aria-label="Acciones principales">
+        <button id="soundToggle" class="small-toggle" title="Activar/Desactivar ambiente" aria-pressed="false">🔊 Ambiente</button>
+        <a href="/auth/login" class="btn">Iniciar sesión</a>
+        <a href="/auth/registro" class="btn primary">Unirse al Gremio</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <article class="hero-card" aria-labelledby="hero-title">
+        <h2 id="hero-title">Forja tu Leyenda en el Gremio</h2>
+        <p>Únete a aventureros reales, toma misiones, comparte crónicas y sube en la jerarquía del Gremio. Este es el punto de encuentro de la comunidad: tabernas, misiones, clasificaciones y foros.</p>
+
+        <div class="cta-row" role="group" aria-label="Acciones de héroe">
+          <a href="/misiones" class="btn">Ver Misiones</a>
+          <a href="/gremio" class="btn">Sala del Gremio</a>
+          <a href="/foro" class="btn">Foro de Aventuras</a>
+        </div>
+
+        <div style="margin-top:18px;color:var(--muted);font-size:0.92rem">
+          Consejo: pulsa el botón de ambiente para activar la atmósfera del gremio.
+        </div>
+      </article>
+
+      <aside class="panel" aria-labelledby="panel-title">
+        <h4 id="panel-title">Crónicas del Gremio</h4>
+        <div class="stats-grid" aria-hidden="false">
+          <div class="stat"><div class="num" data-target="2847">0</div><div class="label">Aventureros activos</div></div>
+          <div class="stat"><div class="num" data-target="15692">0</div><div class="label">Misiones completadas</div></div>
+          <div class="stat"><div class="num" data-target="48351">0</div><div class="label">Criaturas derrotadas</div></div>
+          <div class="stat"><div class="num" data-target="7824">0</div><div class="label">Tesoros recuperados</div></div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Roles / Scrolls -->
+    <section aria-label="Roles del Gremio" class="roles">
+      <article class="scroll-card" data-role="adventurer" tabindex="0" aria-expanded="false">
+        <div class="scroll-head">
+          <h3>👤 Aventurero</h3>
+          <span class="tag">Héroe en ascenso</span>
+        </div>
+        <div class="scroll-body">
+          <p>Acepta misiones, derrota criaturas y suma experiencia.</p>
+          <ul class="perk-list">
+            <li>⚔️ Misiones de dificultad variable</li>
+            <li>🛡️ Recompensas y equipo</li>
+            <li>📈 Sistema de progreso</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="scroll-card" data-role="questmaster" tabindex="0" aria-expanded="false">
+        <div class="scroll-head">
+          <h3>📋 Repcepcionista</h3>
+          <span class="tag">Arquitecto de desafíos</span>
+        </div>
+        <div class="scroll-body">
+          <p>Diseña y publica misiones, verifica logros y recompensa a los héroes.</p>
+          <ul class="perk-list">
+            <li>📝 Herramientas de creación</li>
+            <li>✅ Moderación de misiones</li>
+            <li>🏅 Gestión de recompensas</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="scroll-card" data-role="archmage" tabindex="0" aria-expanded="false">
+        <div class="scroll-head">
+          <h3>⚡ Maestro del Gremio</h3>
+          <span class="tag">Guardián de la orden</span>
+        </div>
+        <div class="scroll-body">
+          <p>Administra miembros, define categorías y vela por el equilibrio del gremio.</p>
+          <ul class="perk-list">
+            <li>🔮 Panel de administración</li>
+            <li>👥 Gestión de rangos</li>
+            <li>📊 Estadísticas avanzadas</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <!-- Ranks -->
+    <section class="ranks" aria-label="Sistema de Rangos">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0;color:var(--accent)">El Camino del Héroe</h3>
+        <small style="color:var(--muted)">Haz clic en un rango para ver más</small>
+      </div>
+
+      <div class="rank-row" role="list">
+        <div class="rank" role="listitem" data-rank="F" tabindex="0" aria-label="Novicio — 0 a 100 EXP">
+          <div class="icon">F</div>
+          <div class="meta">
+            <div class="name">Novicio</div>
+            <div class="exp">0 - 100 EXP</div>
+          </div>
+        </div>
+
+        <div class="rank" role="listitem" data-rank="E" tabindex="0" aria-label="Explorador — 101 a 300 EXP">
+          <div class="icon">E</div>
+          <div class="meta">
+            <div class="name">Explorador</div>
+            <div class="exp">101 - 300 EXP</div>
+          </div>
+        </div>
+
+        <div class="rank" role="listitem" data-rank="D" tabindex="0" aria-label="Guerrero — 301 a 600 EXP">
+          <div class="icon">D</div>
+          <div class="meta">
+            <div class="name">Guerrero</div>
+            <div class="exp">301 - 600 EXP</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rank-row" role="list">
+        <div class="rank" role="listitem" data-rank="C" tabindex="0" aria-label="Paladín — 601 a 1000 EXP">
+          <div class="icon">C</div>
+          <div class="meta">
+            <div class="name">Paladín</div>
+            <div class="exp">601 - 1000 EXP</div>
+          </div>
+        </div>
+
+        <div class="rank" role="listitem" data-rank="B" tabindex="0" aria-label="Campeón — 1001 a 1500 EXP">
+          <div class="icon">B</div>
+          <div class="meta">
+            <div class="name">Campeón</div>
+            <div class="exp">1001 - 1500 EXP</div>
+          </div>
+        </div>
+
+        <div class="rank" role="listitem" data-rank="A" tabindex="0" aria-label="Élite — 1501 a 2100 EXP">
+          <div class="icon">A</div>
+          <div class="meta">
+            <div class="name">Élite</div>
+            <div class="exp">1501 - 2100 EXP</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
+        <div class="rank" role="listitem" data-rank="S" tabindex="0" aria-label="Leyenda — 2101+ EXP">
+          <div class="icon">S</div>
+          <div class="meta">
+            <div class="name">Leyenda</div>
+            <div class="exp">2101+ EXP</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© Dungeon Quest — Comunidad del Gremio</div>
+      <div style="margin-top:6px;color:var(--muted)">¿Listo para escribir tu historia? — Únete al gremio.</div>
+    </footer>
+  </div>
+
+  <!-- Modal: Rank info -->
+  <div id="rankModal" class="modal" role="dialog" aria-hidden="true" aria-labelledby="rankModalTitle">
+    <div class="modal-card" role="document">
+      <button class="modal-close" id="closeModal" aria-label="Cerrar">✕</button>
+      <div id="rankModalBody">
+        <!-- llenado dinámico -->
+      </div>
     </div>
+  </div>
+
+  <!-- Cursor mágico -->
+  <div id="magicCursor" class="magic-cursor" aria-hidden="true"></div>
+
+  <!-- Audio -->
+  <audio id="ambienceAudio" loop preload="auto">
+    <source src="assets/ambience.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="scrollSfx" preload="auto">
+    <source src="assets/scroll.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="rankSfx" preload="auto">
+    <source src="assets/unlock.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="/js/scripts.js"></script>
 </body>
 </html>

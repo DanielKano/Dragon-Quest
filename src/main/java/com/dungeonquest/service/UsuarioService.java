@@ -57,6 +57,21 @@ public class UsuarioService {
     public void eliminarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+    // Permite cambiar el rol de un usuario (usado por administración)
+    public boolean cambiarRolUsuario(Long usuarioId, RolUsuario nuevoRol) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            // Log de confirmación
+            System.out.println("✅ Cambiando rol de usuario " + usuario.getNombreUsuario() + 
+                              " de " + usuario.getRol() + " a " + nuevoRol);
+            usuario.setRol(nuevoRol);
+            usuarioRepository.save(usuario);
+            return true;
+        }
+        return false;
+    }
     
     public boolean actualizarRangoUsuario(Long usuarioId, Integer experienciaGanada) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);

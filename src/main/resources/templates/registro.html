@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dungeon Quest - Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-    <div class="container">
+    <!-- Elementos base -->
+    <div id="particles" aria-hidden="true"></div>
+    
+    <div id="magicCursor" class="magic-cursor" aria-hidden="true"></div>
+    
+    <div class="auth-container">
         <div class="auth-container">
             <div class="auth-card">
                 <h2>Unirse a la Aventura</h2>
@@ -16,29 +23,29 @@
                     <span th:text="${error}"></span>
                 </div>
                 
-                <form th:action="@{/auth/registro}" method="post">
+                <form th:action="@{/auth/registro}" th:object="${usuarioRegistro}" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" th:field="*{nombre}">
+                        <div class="alert alert-error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="nombreUsuario">Nombre de Usuario:</label>
-                        <input type="text" id="nombreUsuario" name="nombreUsuario" required>
+                        <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}">
+                        <div class="alert alert-error" th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" th:field="*{email}">
+                        <div class="alert alert-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                     </div>
                     
                     <div class="form-group">
                         <label for="password">Contraseña:</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rol">Rol:</label>
-                        <select id="rol" name="rol" required>
-                            <option value="AVENTURERO">Aventurero</option>
-                            <option value="RECEPCIONISTA">Recepcionista</option>
-                            <option value="ADMINISTRADOR">Administrador</option>
-                        </select>
+                        <input type="password" id="password" th:field="*{password}">
+                        <div class="alert alert-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                     </div>
                     
                     <button type="submit" class="btn btn-primary btn-full">Comenzar Aventura</button>
@@ -51,5 +58,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Audio -->
+    <audio id="ambienceAudio" loop preload="auto">
+        <source src="/assets/ambience.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scrollSfx" preload="auto">
+        <source src="/assets/scroll.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rankSfx" preload="auto">
+        <source src="/assets/unlock.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script src="/js/scripts.js"></script>
+    <script src="/js/views/auth.js"></script>
 </body>
 </html>

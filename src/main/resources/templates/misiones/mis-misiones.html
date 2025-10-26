@@ -4,10 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dungeon Quest - Mis Misiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/lista.css">
 </head>
 <body>
-    <div class="container">
+    <!-- Elementos base -->
+    <div id="particles" aria-hidden="true"></div>
+    
+    <div class="wrap">
+        <header class="site-header">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">DQ</div>
+                <div>
+                    <h1>Dungeon Quest</h1>
+                    <p>El Gremio de Aventureros</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="soundToggle" class="small-toggle" aria-pressed="false">🔊 Ambiente</button>
+                <a href="/auth/logout" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
         <header class="header">
             <h1>🏰 Dungeon Quest</h1>
             <nav class="nav">
@@ -60,5 +81,8 @@
             </div>
         </main>
     </div>
+    
+    <script src="/js/scripts.js"></script>
+    <script src="/js/views/mis-misiones.js"></script>
 </body>
 </html>
