@@ -1,0 +1,159 @@
+/* auth.css - Estilos específicos completos para autenticación */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.auth-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: var(--card-shadow), 0 0 50px rgba(224, 179, 58, 0.1);
+    border: 1px solid rgba(255,255,255,0.02);
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    animation: cardFloat 1s ease-out forwards;
+}
+
+@keyframes cardFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--accent);
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.alert-error {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.alert-success {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #6bff6b;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-links a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.btn-link {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    text-decoration: underline;
+    padding: 0;
+    margin-top: 10px;
+}
+/* ===== Estilos para los campos del formulario ===== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    font-family: 'Cinzel', serif;
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px rgba(224, 179, 58, 0.3);
+    letter-spacing: 0.5px;
+}
+
+/* Campo de texto */
+.form-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(224, 179, 58, 0.3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #fff;
+    font-family: 'Uncial Antiqua', serif;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(224, 179, 58, 0.1);
+}
+
+/* Efecto al enfocar */
+.form-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(224, 179, 58, 0.6),
+                inset 0 0 5px rgba(224, 179, 58, 0.2);
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.02);
+}
+
+/* Placeholder con efecto sutil */
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+/* Efecto mágico en el borde (animación opcional) */
+@keyframes inputGlow {
+    0% { box-shadow: 0 0 5px rgba(224, 179, 58, 0.2); }
+    50% { box-shadow: 0 0 15px rgba(224, 179, 58, 0.6); }
+    100% { box-shadow: 0 0 5px rgba(224, 179, 58, 0.2); }
+}
+
+.form-group input:focus {
+    animation: inputGlow 1.5s infinite;
+}
+
+/* ===== Botón principal (redefinido) ===== */
+.btn-primary {
+    background: linear-gradient(90deg, #e0b33a, #b78b2e);
+    color: #1a1a1a;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(224, 179, 58, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #f0d278, #c6a649);
+    box-shadow: 0 0 15px rgba(224, 179, 58, 0.6);
+    transform: scale(1.05);
+}

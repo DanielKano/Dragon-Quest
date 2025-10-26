@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Quest - Misiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/lista.css">
+</head>
+<body>
+    <!-- Elementos base -->
+    <div id="particles" aria-hidden="true"></div>
+    
+    <div class="wrap">
+        <header class="site-header">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">DQ</div>
+                <div>
+                    <h1>Dungeon Quest</h1>
+                    <p>El Gremio de Aventureros</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="soundToggle" class="small-toggle" aria-pressed="false">🔊 Ambiente</button>
+                <a href="/auth/logout" class="btn">Cerrar Sesión</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+        <header class="header">
+            <h1>🏰 Dungeon Quest</h1>
+            <nav class="nav">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/misiones" class="nav-link active">Misiones</a>
+                <div th:if="${usuario.rol == 'AVENTURERO'}">
+                    <a href="/misiones/mis-misiones" class="nav-link">Mis Misiones</a>
+                </div>
+                <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                    <a href="/misiones/nueva" class="nav-link">Crear Misión</a>
+                </div>
+                <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
+            </nav>
+        </header>
+        
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Lista de Misiones</h2>
+                <p th:if="${usuario.rol == 'AVENTURERO'}">Misiones disponibles para tu rango: <strong th:text="${usuario.rango}"></strong></p>
+            </div>
+            
+            <div class="misiones-grid">
+                <div th:each="mision : ${misiones}" class="mision-card">
+                    <div class="mision-header">
+                        <h3 th:text="${mision.nombre}"></h3>
+                        <span class="mision-rango" th:text="${mision.rangoRequerido}"></span>
+                    </div>
+                    
+                    <div class="mision-body">
+                        <p th:text="${mision.descripcion}"></p>
+                        
+                        <div class="mision-details">
+                            <div class="detail">
+                                <strong>Categoría:</strong>
+                                <span th:text="${mision.categoria.nombreCategoria}"></span>
+                            </div>
+                            <div class="detail">
+                                <strong>Recompensa:</strong>
+                                <span th:text="${mision.recompensa}">0</span> monedas
+                            </div>
+                            <div class="detail">
+                                <strong>Experiencia:</strong>
+                                <span th:text="${mision.experiencia}">0</span> exp
+                            </div>
+                            <div class="detail">
+                                <strong>Estado:</strong>
+                                <span class="estado" th:text="${mision.estado}"></span>
+                            </div>
+                            <div class="detail" th:if="${mision.fechaLimite}">
+                                <strong>Límite:</strong>
+                                <span th:text="${#temporals.format(mision.fechaLimite, 'dd/MM/yyyy')}"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mision-actions">
+                        <div th:if="${usuario.rol == 'AVENTURERO' and mision.estado == 'DISPONIBLE'}">
+                            <form th:action="@{/misiones/{id}/tomar(id=${mision.idMision})}" method="post">
+                                <button type="submit" class="btn btn-primary btn-small">Tomar Misión</button>
+                            </form>
+                        </div>
+                        
+                        <div th:if="${(usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR') and mision.estado == 'COMPLETADA'}">
+                            <form th:action="@{/misiones/{id}/verificar(id=${mision.idMision})}" method="post">
+                                <button type="submit" class="btn btn-success btn-small">Verificar</button>
+                            </form>
+                        </div>
+                        
+                        <div th:if="${usuario.rol == 'RECEPCIONISTA' or usuario.rol == 'ADMINISTRADOR'}">
+                            <a th:href="@{/misiones/editar/{id}(id=${mision.idMision})}" class="btn btn-secondary btn-small">Editar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div th:if="${#lists.isEmpty(misiones)}" class="no-misiones">
+                    <p>No hay misiones disponibles en este momento.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div>© Dungeon Quest — Comunidad del Gremio</div>
+        </footer>
+    </div>
+
+    <!-- Elementos base -->
+    <div id="rankModal" class="modal" aria-hidden="true">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModal">✕</button>
+            <div id="rankModalBody"></div>
+        </div>
+    </div>
+
+    <div id="magicCursor" class="magic-cursor" aria-hidden="true"></div>
+
+    <!-- Audio -->
+    <audio id="ambienceAudio" loop preload="auto">
+        <source src="/assets/ambience.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="scrollSfx" preload="auto">
+        <source src="/assets/scroll.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="rankSfx" preload="auto">
+        <source src="/assets/unlock.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="/js/scripts.js"></script>
+    <script src="/js/views/lista.js"></script>
+</body>
+</html>
