@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DungeonQuestApplication<dungeon-quest>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.dungeonquest.DungeonQuestApplication",
+            "projectName": "dungeon-quest",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

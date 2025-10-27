@@ -1,9 +1,11 @@
 package com.dungeonquest.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tipos")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,17 +16,22 @@ public class Tipo {
     
     private Integer experienciaAsociada;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "TEXT")
+    private String descripcionBase;
+    
+    @ManyToOne
     @JoinColumn(name = "categoria_id")
+    @JsonIgnoreProperties({"tipos", "misiones"})
     private Categoria categoria;
     
     // Constructores
     public Tipo() {}
     
-    public Tipo(String nombreTipo, Integer experienciaAsociada, Categoria categoria) {
+    public Tipo(String nombreTipo, Integer experienciaAsociada, Categoria categoria, String descripcionBase) {
         this.nombreTipo = nombreTipo;
         this.experienciaAsociada = experienciaAsociada;
         this.categoria = categoria;
+        this.descripcionBase = descripcionBase;
     }
     
     // Getters y Setters
@@ -36,6 +43,9 @@ public class Tipo {
     
     public Integer getExperienciaAsociada() { return experienciaAsociada; }
     public void setExperienciaAsociada(Integer experienciaAsociada) { this.experienciaAsociada = experienciaAsociada; }
+    
+    public String getDescripcionBase() { return descripcionBase; }
+    public void setDescripcionBase(String descripcionBase) { this.descripcionBase = descripcionBase; }
     
     public Categoria getCategoria() { return categoria; }
     public void setCategoria(Categoria categoria) { this.categoria = categoria; }

@@ -39,41 +39,50 @@
                 </header>
                 
                 <div class="main-content">
-                    <form th:action="@{/misiones/nueva}" method="post" th:object="${mision}">
+                    <form id="misionForm" th:action="@{/misiones/nueva}" method="post">
                         <div class="form-group">
-                            <label for="nombre">Nombre</label>
-                            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="descripcion">Descripción</label>
-                            <textarea id="descripcion" name="descripcion" th:field="*{descripcion}" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="categoriaId">Categoría</label>
-                            <select id="categoriaId" name="categoriaId" th:field="*{categoriaId}" required>
-                                <option value="">Selecciona una categoría...</option>
+                            <label for="categoria">Categoría</label>
+                            <select id="categoria" name="categoriaId" class="form-control" required>
+                                <option value="">Seleccione una categoría</option>
                                 <option th:each="cat : ${categorias}" 
                                         th:value="${cat.idCategoria}" 
-                                        th:text="${cat.nombreCategoria}"></option>
+                                        th:text="${cat.nombreCategoria}">
+                                </option>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label for="rangoRequerido">Rango Requerido</label>
-                            <select id="rangoRequerido" name="rangoRequerido" th:field="*{rangoRequerido}" required>
-                                <option value="">Selecciona un rango...</option>
-                                <option th:each="r : ${rangos}" 
-                                        th:value="${r}" 
-                                        th:text="${r}"></option>
+                            <label for="tipo">Tipo</label>
+                            <select id="tipo" name="tipoId" class="form-control" required disabled>
+                                <option value="">Primero seleccione una categoría</option>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label for="recompensa">Recompensa (monedas)</label>
-                            <input type="number" id="recompensa" name="recompensa" th:field="*{recompensa}" min="0" required>
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
                         </div>
+
                         <div class="form-group">
                             <label for="experiencia">Experiencia</label>
-                            <input type="number" id="experiencia" name="experiencia" th:field="*{experiencia}" min="0" required>
+                            <input type="number" id="experiencia" name="experiencia" class="form-control" required readonly>
                         </div>
+
+                        <div class="form-group">
+                            <label for="rangoRequerido">Rango</label>
+                            <input type="text" id="rangoRequerido" name="rangoRequerido" class="form-control" required readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recompensa">Recompensa</label>
+                            <input type="number" id="recompensa" name="recompensa" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                            <textarea id="descripcion" name="descripcion" class="form-control" rows="4" required></textarea>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-full">Crear Misión</button>
                     </form>
                 </div>

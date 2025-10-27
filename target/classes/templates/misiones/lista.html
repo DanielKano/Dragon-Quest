@@ -40,9 +40,8 @@
                    class="nav-link">Mis Misiones</a>
                 
                 <!-- Opciones para RECEPCIONISTA y ADMINISTRADOR -->
-                <a th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
-                    <a href="/misiones/nueva" class="nav-link">Crear Misión</a>
-                </div>
+                <a th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}"
+                   href="/misiones/nueva" class="nav-link">Crear Misión</a>
                 <a href="/auth/logout" class="nav-link logout">Cerrar Sesión</a>
             </nav>
         </header>
@@ -53,61 +52,78 @@
                 <p th:if="${usuario.rol.name() == 'AVENTURERO'}">Misiones disponibles para tu rango: <strong th:text="${usuario.rango}"></strong></p>
             </div>
             
+            <!-- Contenedor para mensajes de éxito (flash attributes) -->
+            <div th:if="${mensaje}" class="alert alert-success" role="alert">
+                <p th:text="${mensaje}"></p>
+            </div>
+
+            <!-- Contenedor para mensajes de error (flash attributes) -->
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Rango</th>
+                        <th>Recompensa</th>
+                        <th>Categoría</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="m : ${misiones}">
+                        <td th:text="${m.nombre}">Nombre</td>
+                        <td th:text="${m.descripcion}">Descripción</td>
+                        <td th:text="${m.rangoRequerido}">Rango</td>
+                        <td th:text="${m.recompensa}">Recompensa</td>
+                        <td th:text="${m.categoria.nombreCategoria}">Categoría</td>
+            
+                        <!-- Aquí está el botón funcional -->
+                        <td>
+                            <a th:if="${m.estado.name() == 'DISPONIBLE' and usuario.rol.name() == 'AVENTURERO'}"
+                               th:href="@{/misiones/tomar/{id}(id=${m.idMision})}"
+                               class="btn btn-success btn-sm">
+                                Tomar
+                            </a>
+
+                            <!-- Formulario para asignar (solo para roles autorizados y misiones disponibles) -->
+                            <div th:if="${(usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR') and m.estado.name() == 'DISPONIBLE'}">
+                                <form th:action="@{/misiones/{id}/asignar(id=${m.idMision})}" method="post" class="form-inline">
+                                    <select name="aventureroId" class="form-control form-control-sm" required>
+                                        <option value="">Asignar a...</option>
+                                        <option th:each="aventurero : ${aventureros}"
+                                                th:value="${aventurero.idUsuario}"
+                                                th:text="${aventurero.nombreUsuario}">
+                                        </option>
+                                    </select>
+                                    <button type="submit" class="btn btn-warning btn-sm ml-1">
+                                        Asignar
+                                    </button>
+                                </form>
+                            </div>
+
+                            <span th:if="${m.estado.name() != 'DISPONIBLE'}" class="text-muted">
+                                No disponible
+                            </span>
+
+                            <!-- Botón para verificar (solo para roles autorizados) -->
+                            <form th:if="${(usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR') and m.estado.name() == 'COMPLETADA'}"
+                                  th:action="@{/misiones/{id}/verificar(id=${m.idMision})}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    Verificar
+                                </button>
+                            </form>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="misiones-grid">
-                <div th:each="mision : ${misiones}" class="mision-card">
-                    <div class="mision-header">
-                        <h3 th:text="${mision.nombre}"></h3>
-                        <span class="mision-rango" th:text="${mision.rangoRequerido}"></span>
-                    </div>
-                    
-                    <div class="mision-body">
-                        <p th:text="${mision.descripcion}"></p>
-                        
-                        <div class="mision-details">
-                            <div class="detail">
-                                <strong>Categoría:</strong>
-                                <span th:text="${mision.categoria.nombreCategoria}"></span>
-                            </div>
-                            <div class="detail">
-                                <strong>Recompensa:</strong>
-                                <span th:text="${mision.recompensa}">0</span> monedas
-                            </div>
-                            <div class="detail">
-                                <strong>Experiencia:</strong>
-                                <span th:text="${mision.experiencia}">0</span> exp
-                            </div>
-                            <div class="detail">
-                                <strong>Estado:</strong>
-                                <span class="estado" th:text="${mision.estado}"></span>
-                            </div>
-                            <div class="detail" th:if="${mision.fechaLimite}">
-                                <strong>Límite:</strong>
-                                <span th:text="${#temporals.format(mision.fechaLimite, 'dd/MM/yyyy')}"></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mision-actions">
-                        <div th:if="${usuario.rol.name() == 'AVENTURERO' and mision.estado == 'DISPONIBLE'}">
-                            <form th:action="@{/misiones/{id}/tomar(id=${mision.idMision})}" method="post">
-                                <button type="submit" class="btn btn-primary btn-small">Tomar Misión</button>
-                            </form>
-                        </div>
-                        
-                        <div th:if="${(usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR') and mision.estado == 'COMPLETADA'}">
-                            <form th:action="@{/misiones/{id}/verificar(id=${mision.idMision})}" method="post">
-                                <button type="submit" class="btn btn-success btn-small">Verificar</button>
-                            </form>
-                        </div>
-                        
-                        <div th:if="${usuario.rol.name() == 'RECEPCIONISTA' or usuario.rol.name() == 'ADMINISTRADOR'}">
-                            <a th:href="@{/misiones/editar/{id}(id=${mision.idMision})}" class="btn btn-secondary btn-small">Editar</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div th:if="${#lists.isEmpty(misiones)}" class="no-misiones">
-                    <p>No hay misiones disponibles en este momento.</p>
+                <div th:if="${infoMessage}" class="no-misiones">
+                    <p th:text="${infoMessage}"></p>
                 </div>
             </div>
         </main>

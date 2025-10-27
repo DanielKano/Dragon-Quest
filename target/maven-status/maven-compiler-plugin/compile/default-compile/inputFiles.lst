@@ -4,6 +4,7 @@ C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\repository\
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\dto\UsuarioLoginDTO.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\Categoria.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\controller\AuthController.java
+C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\controller\CustomErrorController.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\RolUsuario.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\repository\MisionRepository.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\Usuario.java
@@ -13,9 +14,11 @@ C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\Tipo.
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\DungeonQuestApplication.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\EstadoMision.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\model\Mision.java
+C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\repository\TipoRepository.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\dto\MisionCreacionDTO.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\exception\UsuarioExistenteException.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\controller\UserManagementController.java
+C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\controller\TipoController.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\service\UsuarioService.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\config\SecurityConfig.java
 C:\Users\polon\Documents\Dragon-Quest\src\main\java\com\dungeonquest\repository\CategoriaRepository.java

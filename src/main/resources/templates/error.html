@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Dungeon Quest</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="particles" aria-hidden="true"></div>
+    
+    <div class="wrap">
+        <header class="site-header">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">DQ</div>
+                <div>
+                    <h1>Dungeon Quest</h1>
+                    <p>El Gremio de Aventureros</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/dashboard" class="btn">Volver al Dashboard</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <div class="error-content">
+                    <h2>¡Ops! Ha ocurrido un error</h2>
+                    <p th:text="${error}">Error desconocido</p>
+                    <p th:text="${message}">Mensaje de error</p>
+                    <p>
+                        <a href="/dashboard" class="btn">Volver al Dashboard</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

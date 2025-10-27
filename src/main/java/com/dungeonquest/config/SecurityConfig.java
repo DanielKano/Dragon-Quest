@@ -26,19 +26,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/css/**", "/js/**", "/assets/**", "/auth/registro", "/auth/login").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
-                .requestMatchers("/misiones/nueva", "/misiones/editar/**").hasAnyRole("ADMINISTRADOR", "RECEPCIONISTA")
+                .requestMatchers("/", "/css/**", "/js/**", "/assets/**", "/auth/**", "/error").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")                
+                .requestMatchers("/misiones/nueva", "/misiones/editar/**", "/misiones/verificar/**", "/misiones/{id}/asignar").hasAnyRole("ADMINISTRADOR", "RECEPCIONISTA")
+                .requestMatchers("/misiones", "/misiones/mis-misiones", "/misiones/tomar/**", "/misiones/completar/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
                 .loginProcessingUrl("/auth/login")
-                .usernameParameter("nombreUsuario")  // Importante: debe coincidir con el campo del formulario
-                .passwordParameter("password")        // Importante: debe coincidir con el campo del formulario
+                .usernameParameter("nombreUsuario")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/auth/login?error=true")
                 .permitAll()
+            )
+            .exceptionHandling(handling -> handling
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/auth/login");
+                })
+                .accessDeniedPage("/error")
             )
             .logout(logout -> logout
                 .logoutUrl("/auth/logout")
